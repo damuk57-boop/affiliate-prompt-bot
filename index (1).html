@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Prompt Kit 2.0</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f4f6f8;margin:0;padding:20px;color:#17202a}
+main{max-width:560px;margin:auto}
+h1{font-size:24px}
+p{color:#5f6b76}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{border:0;border-radius:16px;padding:20px 10px;font-size:17px;font-weight:700;cursor:pointer;background:white;box-shadow:0 2px 8px #0001}
+button:active{transform:scale(.98)}
+#output{margin-top:18px;background:white;padding:18px;border-radius:16px;white-space:pre-wrap;min-height:100px}
+textarea{width:100%;box-sizing:border-box;margin-top:14px;padding:12px;border-radius:12px;border:1px solid #ccd3da}
+.small{font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<h1>📦 Affiliate Prompt Kit 2.0</h1>
+<p>เลือกชุด Prompt ที่ต้องการ แล้วคัดลอกไปใช้กับ ChatGPT หรือ Meta AI</p>
+<div class="grid">
+<button onclick="show('MASTER')">🟦 MASTER</button>
+<button onclick="show('IMAGE')">🟩 IMAGE</button>
+<button onclick="show('VIDEO')">🟨 VIDEO</button>
+<button onclick="show('SCRIPT')">🟧 SCRIPT</button>
+<button onclick="show('CAPTION')">🟪 CAPTION</button>
+<button onclick="show('QC')">🟥 QC</button>
+</div>
+<textarea id="brief" rows="5" placeholder="ใส่รายละเอียดสินค้า เช่น ชื่อสินค้า จุดเด่น กลุ่มลูกค้า และข้อจำกัด"></textarea>
+<div id="output">ผลลัพธ์ Prompt จะแสดงตรงนี้</div>
+<button style="width:100%;margin-top:12px" onclick="copyOutput()">📋 คัดลอก Prompt</button>
+<p class="small">เวอร์ชันเริ่มต้น: ใช้เป็นเมนูรวม Prompt ก่อนเชื่อมเข้ากับ Telegram Bot</p>
+<script>
+const templates={
+MASTER:`คุณคือ AI Creative Director สำหรับสร้างคอนเทนต์ Affiliate\nสินค้า: {{BRIEF}}\nสร้าง: วิเคราะห์สินค้า, objection, core message, Hook/Open/Proof/CTA, prompts ภาพและวิดีโอ, สคริปต์ 20–22 วินาที, caption, hashtags และ QC checklist\nกฎ: สินค้าตรงภาพอ้างอิง 100%, continuity ต่อเนื่อง, ห้ามกล่าวอ้างเกินจริง`,
+IMAGE:`สร้าง Prompt ภาพโฆษณาแนว realistic vertical 9:16 สำหรับสินค้า: {{BRIEF}}\nสร้างภาพ Hook, Open/Transformation, Proof และ CTA โดยรักษาสินค้าตรงภาพอ้างอิง 100% และคงสภาพแวดล้อม/ตัวละครต่อเนื่อง`,
+VIDEO:`สร้าง Video Prompt แนว commercial realistic vertical 9:16 สำหรับสินค้า: {{BRIEF}}\nแบ่งเป็น Hook 0–3s, Open 3–9s, Proof 9–16s และ CTA 16–22s พร้อมการเคลื่อนไหวกล้องและความต่อเนื่องของสินค้า`,
+SCRIPT:`เขียนสคริปต์เสียงภาษาไทย 20–22 วินาที สำหรับสินค้า: {{BRIEF}}\nโครงสร้าง HOOK → BODY/PROOF → CTA ใช้คำพูดเป็นธรรมชาติ ชัดเจน และห้ามกล่าวอ้างเกินจริง`,
+CAPTION:`เขียน Caption สำหรับ TikTok/Reels สำหรับสินค้า: {{BRIEF}}\nให้สั้น น่าสนใจ มีประโยชน์ และใส่ CTA เพียงหนึ่งการกระทำ พร้อม Hashtags ที่เกี่ยวข้อง`,
+QC:`ตรวจสอบคอนเทนต์ Affiliate ต่อไปนี้: {{BRIEF}}\nตรวจ Product Accuracy, Visual Continuity, Claim Accuracy, Hook, Proof, CTA, ความชัดเจน และสิ่งที่ต้องแก้ไข`
+};
+function show(type){
+ const brief=document.getElementById('brief').value||'[กรอกรายละเอียดสินค้า]';
+ document.getElementById('output').textContent=templates[type].replace('{{BRIEF}}',brief);
+}
+function copyOutput(){
+ navigator.clipboard.writeText(document.getElementById('output').textContent);
+ alert('คัดลอกแล้ว');
+}
+</script>
+</main>
+</body>
+</html>
