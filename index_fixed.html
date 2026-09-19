@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Prompt Kit 2.0</title>
+<style>
+body{margin:0;padding:16px;background:#f3f5f7;font-family:Arial,sans-serif;color:#17202a}
+main{max-width:650px;margin:auto}.header{background:#172b4d;color:white;padding:20px;border-radius:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+button{padding:16px;border:0;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer}
+.menu{background:white}.menu.active{background:#dce7ff;border:2px solid #4267d5}
+.panel{background:white;padding:16px;border-radius:16px;margin-top:14px}
+textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3da;border-radius:10px;font-size:15px}
+#output{white-space:pre-wrap;line-height:1.6;background:#fafafa;border:1px solid #ddd;border-radius:10px;padding:12px;min-height:180px}
+.primary{width:100%;background:#172b4d;color:white;margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+<div class="header"><h1>📦 Affiliate Prompt Kit 2.0</h1><div>เครื่องมือสร้าง Prompt Affiliate</div></div>
+<div class="panel">
+<label>📋 รายละเอียดสินค้า</label>
+<textarea id="product" rows="6" placeholder="ชื่อสินค้า / แบรนด์ / รุ่น / จุดเด่น / วิธีใช้ / กลุ่มลูกค้า / ข้อเสนอจริง"></textarea>
+<br><br>
+<label>📷 ข้อกำหนดเพิ่มเติม</label>
+<textarea id="extra" rows="3" placeholder="เช่น สินค้าตรงภาพอ้างอิง 100%"></textarea>
+</div>
+<div class="panel">
+<b>เลือกชุด Prompt: <span id="selected">MASTER</span></b>
+<div class="grid">
+<button class="menu active" data-type="MASTER">🟦 MASTER</button>
+<button class="menu" data-type="IMAGE">🟩 IMAGE</button>
+<button class="menu" data-type="VIDEO">🟨 VIDEO</button>
+<button class="menu" data-type="SCRIPT">🟧 SCRIPT</button>
+<button class="menu" data-type="CAPTION">🟪 CAPTION</button>
+<button class="menu" data-type="QC">🟥 QC</button>
+</div>
+</div>
+<div class="panel">
+<b>ผลลัพธ์ Prompt</b>
+<div id="output"></div>
+<button class="primary" id="copy">📋 คัดลอก Prompt</button>
+</div>
+</main>
+<script>
+var current = "MASTER";
+var names = ["MASTER","IMAGE","VIDEO","SCRIPT","CAPTION","QC"];
+function makePrompt(){
+  var product = document.getElementById("product").value || "[กรอกรายละเอียดสินค้า]";
+  var extra = document.getElementById("extra").value || "[ไม่มีข้อมูลเพิ่มเติม]";
+  var common = "\n\nกฎ: สินค้าตรงภาพอ้างอิง 100%, รักษาความต่อเนื่อง, realistic commercial advertising, vertical 9:16, ห้ามกล่าวอ้างเกินจริง";
+  var text = {
+    MASTER:"คุณคือ AI Creative Director สำหรับสร้างคอนเทนต์ Affiliate\n\nสินค้า:\n"+product+"\n\nข้อมูลเพิ่มเติม:\n"+extra+"\n\nสร้าง: วิเคราะห์สินค้า, Customer Objection, Core Message, HOOK, OPEN/TRANSFORMATION, PROOF, CTA, Prompt ภาพ, Video Prompt, สคริปต์ 20–22 วินาที, Caption, Hashtags และ QC Checklist"+common,
+    IMAGE:"สร้าง Prompt ภาพโฆษณา 4 ภาพ (HOOK, OPEN/TRANSFORMATION, PROOF, CTA) สำหรับสินค้า:\n"+product+"\n\nข้อมูลเพิ่มเติม:\n"+extra+common,
+    VIDEO:"สร้าง Video Prompt แนวตั้ง 9:16 ความยาว 20–22 วินาที แบ่ง HOOK 0–3s, OPEN 3–9s, PROOF 9–16s และ CTA 16–22s สำหรับสินค้า:\n"+product+"\n\n"+extra+common,
+    SCRIPT:"เขียนสคริปต์เสียงภาษาไทย 20–22 วินาที โครงสร้าง HOOK → BODY/PROOF → CTA สำหรับสินค้า:\n"+product+"\n\n"+extra+"\nใช้คำพูดเป็นธรรมชาติและไม่กล่าวอ้างเกินจริง",
+    CAPTION:"เขียน Caption, CTA และ Hashtags 8–12 รายการ สำหรับสินค้า:\n"+product+"\n\n"+extra+"\nใช้ข้อมูลจริงเท่านั้น",
+    QC:"ตรวจสอบคอนเทนต์ Affiliate ด้าน Product Accuracy, Visual Continuity, Before/After, Claim Accuracy, Hook, Proof, CTA และความสมจริง\n\nสินค้า:\n"+product+"\n\n"+extra
+  };
+  document.getElementById("output").textContent = text[current];
+}
+document.querySelectorAll(".menu").forEach(function(button){
+  button.addEventListener("click",function(){
+    current = button.getAttribute("data-type");
+    document.querySelectorAll(".menu").forEach(function(item){item.classList.remove("active");});
+    button.classList.add("active");
+    document.getElementById("selected").textContent = current;
+    makePrompt();
+  });
+});
+document.getElementById("product").addEventListener("input",makePrompt);
+document.getElementById("extra").addEventListener("input",makePrompt);
+document.getElementById("copy").addEventListener("click",function(){
+  var output = document.getElementById("output").textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(output).then(function(){alert("คัดลอกแล้ว");});}
+  else{alert("กดค้างที่ข้อความเพื่อคัดลอก");}
+});
+makePrompt();
+</script>
+</body>
+</html>
