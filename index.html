@@ -1,82 +1,262 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Affiliate Prompt Kit 2.0</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Creative Director — Affiliate Content</title>
 <style>
-body{margin:0;padding:16px;background:#f3f5f7;font-family:Arial,sans-serif;color:#17202a}
-main{max-width:650px;margin:auto}.header{background:#172b4d;color:white;padding:20px;border-radius:18px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
-button{padding:16px;border:0;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer}
-.menu{background:white}.menu.active{background:#dce7ff;border:2px solid #4267d5}
-.panel{background:white;padding:16px;border-radius:16px;margin-top:14px}
-textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3da;border-radius:10px;font-size:15px}
-#output{white-space:pre-wrap;line-height:1.6;background:#fafafa;border:1px solid #ddd;border-radius:10px;padding:12px;min-height:180px}
-.primary{width:100%;background:#172b4d;color:white;margin-top:10px}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#f4f7fb;color:#172033}
+header{background:linear-gradient(135deg,#172033,#315a8a);color:white;padding:28px 20px}
+.wrap{max-width:1200px;margin:auto}h1{margin:0 0 7px;font-size:28px}header p{margin:0;opacity:.86}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:20px;margin:20px auto}
+.card{background:white;border:1px solid #dfe6ef;border-radius:16px;padding:20px;box-shadow:0 5px 20px #17203310}
+label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:11px 12px;border:1px solid #ccd6e2;border-radius:10px;font:inherit;background:#fff}textarea{min-height:100px;resize:vertical}
+.drop{border:2px dashed #aebdce;border-radius:12px;padding:18px;text-align:center;cursor:pointer;background:#f8fafc}.drop:hover{background:#f0f5fa}
+.preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.preview img{width:82px;height:82px;object-fit:cover;border-radius:9px;border:1px solid #ddd}
+button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:#315a8a;color:#fff}.secondary{background:#eaf0f6;color:#172033}.danger{background:#fbe9e9;color:#a12a2a}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.tab{background:#eef3f8;color:#31445c}.tab.active{background:#315a8a;color:white}
+.output{white-space:pre-wrap;line-height:1.65;background:#0f1724;color:#edf4ff;border-radius:12px;padding:18px;min-height:500px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;overflow:auto}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.kpi div{background:#f5f8fb;padding:12px;border-radius:10px;text-align:center}.kpi b{display:block;font-size:20px}
+.small{font-size:12px;color:#66758a}.status{margin-top:10px;color:#315a8a;font-weight:700}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-<main>
-<div class="header"><h1>📦 Affiliate Prompt Kit 2.0</h1><div>เครื่องมือสร้าง Prompt Affiliate</div></div>
-<div class="panel">
-<label>📋 รายละเอียดสินค้า</label>
-<textarea id="product" rows="6" placeholder="ชื่อสินค้า / แบรนด์ / รุ่น / จุดเด่น / วิธีใช้ / กลุ่มลูกค้า / ข้อเสนอจริง"></textarea>
-<br><br>
-<label>📷 ข้อกำหนดเพิ่มเติม</label>
-<textarea id="extra" rows="3" placeholder="เช่น สินค้าตรงภาพอ้างอิง 100%"></textarea>
+<header><div class="wrap"><h1>AI Creative Director</h1><p>Web App สร้างชุดคอนเทนต์ Affiliate จากรูปสินค้า + รายละเอียด</p></div></header>
+<main class="wrap grid">
+<section class="card">
+<h2>ข้อมูลสินค้า</h2>
+<label>รูปสินค้า (1–5 รูป)</label>
+<div class="drop" onclick="document.getElementById('photos').click()">คลิกเพื่อเลือกรูปสินค้า</div>
+<input id="photos" type="file" accept="image/*" multiple hidden>
+<div id="preview" class="preview"></div>
+
+<label>ชื่อสินค้า</label>
+<input id="name" placeholder="เช่น VISBEL Epoxy Floor Paint">
+
+<label>รายละเอียด / คุณสมบัติ</label>
+<textarea id="details" placeholder="ใส่คุณสมบัติ จุดขาย วิธีใช้ ขนาด สี ราคา ฯลฯ"></textarea>
+
+<label>ประเภทสินค้า</label>
+<select id="category">
+<option>แต่งบ้าน / DIY</option><option>เครื่องมือ</option><option>ของใช้ในบ้าน</option>
+<option>รถยนต์ / มอเตอร์ไซค์</option><option>อิเล็กทรอนิกส์</option><option>แฟชั่น</option>
+<option>ความงาม / ดูแลตัวเอง</option><option>Outdoor</option><option>อื่น ๆ</option>
+</select>
+
+<label>สไตล์คอนเทนต์</label>
+<select id="style">
+<option>รีวิวใช้งานจริง</option><option>Problem → Solution</option><option>Before → After</option>
+<option>DIY / How-to</option><option>ทดลองใช้</option><option>Unboxing</option>
+</select>
+
+<div class="actions">
+<button class="primary" onclick="generate()">สร้างคอนเทนต์</button>
+<button class="secondary" onclick="copyOutput()">คัดลอกทั้งหมด</button>
+<button class="secondary" onclick="downloadTxt()">ดาวน์โหลด .txt</button>
+<button class="danger" onclick="resetAll()">ล้างข้อมูล</button>
 </div>
-<div class="panel">
-<b>เลือกชุด Prompt: <span id="selected">MASTER</span></b>
-<div class="grid">
-<button class="menu active" data-type="MASTER">🟦 MASTER</button>
-<button class="menu" data-type="IMAGE">🟩 IMAGE</button>
-<button class="menu" data-type="VIDEO">🟨 VIDEO</button>
-<button class="menu" data-type="SCRIPT">🟧 SCRIPT</button>
-<button class="menu" data-type="CAPTION">🟪 CAPTION</button>
-<button class="menu" data-type="QC">🟥 QC</button>
+<div id="status" class="status"></div>
+</section>
+
+<section class="card">
+<div class="tabs">
+<button class="tab active" onclick="showTab('all',this)">ทั้งหมด</button>
+<button class="tab" onclick="showTab('analysis',this)">วิเคราะห์</button>
+<button class="tab" onclick="showTab('prompts',this)">Prompts</button>
+<button class="tab" onclick="showTab('script',this)">Script</button>
+<button class="tab" onclick="showTab('social',this)">Caption</button>
 </div>
-</div>
-<div class="panel">
-<b>ผลลัพธ์ Prompt</b>
-<div id="output"></div>
-<button class="primary" id="copy">📋 คัดลอก Prompt</button>
-</div>
+<div class="kpi"><div><b id="photoCount">0</b>รูป</div><div><b>9:16</b>Video</div><div><b>20s</b>Voice</div></div>
+<div id="output" class="output">กรอกข้อมูลสินค้า แล้วกด “สร้างคอนเทนต์”</div>
+</section>
 </main>
 <script>
-var current = "MASTER";
-var names = ["MASTER","IMAGE","VIDEO","SCRIPT","CAPTION","QC"];
-function makePrompt(){
-  var product = document.getElementById("product").value || "[กรอกรายละเอียดสินค้า]";
-  var extra = document.getElementById("extra").value || "[ไม่มีข้อมูลเพิ่มเติม]";
-  var common = "\n\nกฎ: สินค้าตรงภาพอ้างอิง 100%, รักษาความต่อเนื่อง, realistic commercial advertising, vertical 9:16, ห้ามกล่าวอ้างเกินจริง";
-  var text = {
-    MASTER:"คุณคือ AI Creative Director สำหรับสร้างคอนเทนต์ Affiliate\n\nสินค้า:\n"+product+"\n\nข้อมูลเพิ่มเติม:\n"+extra+"\n\nสร้าง: วิเคราะห์สินค้า, Customer Objection, Core Message, HOOK, OPEN/TRANSFORMATION, PROOF, CTA, Prompt ภาพ, Video Prompt, สคริปต์ 20–22 วินาที, Caption, Hashtags และ QC Checklist"+common,
-    IMAGE:"สร้าง Prompt ภาพโฆษณา 4 ภาพ (HOOK, OPEN/TRANSFORMATION, PROOF, CTA) สำหรับสินค้า:\n"+product+"\n\nข้อมูลเพิ่มเติม:\n"+extra+common,
-    VIDEO:"สร้าง Video Prompt แนวตั้ง 9:16 ความยาว 20–22 วินาที แบ่ง HOOK 0–3s, OPEN 3–9s, PROOF 9–16s และ CTA 16–22s สำหรับสินค้า:\n"+product+"\n\n"+extra+common,
-    SCRIPT:"เขียนสคริปต์เสียงภาษาไทย 20–22 วินาที โครงสร้าง HOOK → BODY/PROOF → CTA สำหรับสินค้า:\n"+product+"\n\n"+extra+"\nใช้คำพูดเป็นธรรมชาติและไม่กล่าวอ้างเกินจริง",
-    CAPTION:"เขียน Caption, CTA และ Hashtags 8–12 รายการ สำหรับสินค้า:\n"+product+"\n\n"+extra+"\nใช้ข้อมูลจริงเท่านั้น",
-    QC:"ตรวจสอบคอนเทนต์ Affiliate ด้าน Product Accuracy, Visual Continuity, Before/After, Claim Accuracy, Hook, Proof, CTA และความสมจริง\n\nสินค้า:\n"+product+"\n\n"+extra
-  };
-  document.getElementById("output").textContent = text[current];
+let files=[];
+let generated={all:"",analysis:"",prompts:"",script:"",social:""};
+
+document.getElementById('photos').addEventListener('change',e=>{
+ files=[...e.target.files].slice(0,5); renderPreview();
+});
+function renderPreview(){
+ const p=document.getElementById('preview');p.innerHTML='';
+ files.forEach(f=>{let im=document.createElement('img');im.src=URL.createObjectURL(f);p.appendChild(im)});
+ document.getElementById('photoCount').textContent=files.length;
 }
-document.querySelectorAll(".menu").forEach(function(button){
-  button.addEventListener("click",function(){
-    current = button.getAttribute("data-type");
-    document.querySelectorAll(".menu").forEach(function(item){item.classList.remove("active");});
-    button.classList.add("active");
-    document.getElementById("selected").textContent = current;
-    makePrompt();
-  });
-});
-document.getElementById("product").addEventListener("input",makePrompt);
-document.getElementById("extra").addEventListener("input",makePrompt);
-document.getElementById("copy").addEventListener("click",function(){
-  var output = document.getElementById("output").textContent;
-  if(navigator.clipboard){navigator.clipboard.writeText(output).then(function(){alert("คัดลอกแล้ว");});}
-  else{alert("กดค้างที่ข้อความเพื่อคัดลอก");}
-});
-makePrompt();
+function val(id){return document.getElementById(id).value.trim()}
+function generate(){
+ const n=val('name')||'[ชื่อสินค้า]';
+ const d=val('details')||'[รายละเอียดสินค้า]';
+ const c=val('category'), s=val('style');
+ const ref=files.length?'Use the uploaded product image(s) as the EXACT PRODUCT REFERENCE.':'Use the provided product reference when available.';
+ const analysis=`1. วิเคราะห์สินค้า
+
+สินค้า: ${n}
+ประเภท: ${c}
+Content Style: ${s}
+
+รายละเอียดที่ได้รับ:
+${d}
+
+ปัญหาที่สินค้าแก้:
+ระบุจากรายละเอียดสินค้าโดยไม่สร้างคุณสมบัติเพิ่ม
+
+จุดขายหลัก:
+- เลือกจากข้อมูลที่ผู้ใช้ให้มา
+- เน้นประโยชน์ที่พิสูจน์ได้
+- ห้ามกล่าวอ้างเกินข้อมูล
+
+กลุ่มเป้าหมาย:
+เลือกจากประเภทสินค้าและสถานการณ์ใช้งานจริง
+
+Content Angle:
+1) Problem → Solution
+2) Before → After
+3) รีวิวใช้งานจริง
+
+มุมหลักที่แนะนำ:
+${s}`;
+
+ const before=`2. BEFORE IMAGE PROMPT
+
+Create an ultra-photorealistic vertical 9:16 BEFORE image for an affiliate short video.
+
+PRODUCT CONTEXT: ${n}
+CATEGORY: ${c}
+
+SCENE:
+Create a realistic environment where the problem this product is designed to address is naturally visible. Show the ordinary condition BEFORE using the product. Choose a realistic Thai home, workspace, vehicle area, outdoor area, or other environment appropriate to the product.
+
+Do not show the product being used in the BEFORE scene. Do not exaggerate damage or create unrealistic conditions.
+
+STYLE:
+Commercial lifestyle photography, ultra-photorealistic, natural lighting, realistic materials, authentic Thai environment, realistic smartphone/camera look, natural composition, vertical 9:16.`;
+
+ const after=`3. AFTER IMAGE PROMPT
+
+Create an ultra-photorealistic vertical 9:16 AFTER image.
+
+${ref}
+
+PRODUCT ACCURACY IS CRITICAL:
+Preserve the exact product shape, proportions, color, material, logo, label, text, visible components, accessories and packaging shown in the reference. Do not redesign, recolor, add, remove or replace any part.
+
+CONTINUITY:
+Use the same location and camera perspective as the BEFORE image. Preserve walls, floors, doors, windows, furniture and surrounding objects wherever applicable. If a character is used, keep the same face, hair, clothing and appearance.
+
+Show the product realistically installed or being used, with a believable result based only on the supplied product information.
+
+STYLE:
+Ultra-photorealistic commercial lifestyle photography, natural Thai daylight, realistic textures, realistic scale, vertical 9:16.`;
+
+ const scene1=`4. VIDEO PROMPT — SCENE 1 (8–10 seconds)
+
+Create a realistic vertical 9:16 affiliate video.
+
+PRODUCT: ${n}
+STYLE: ${s}
+
+Opening Shot:
+Show the real problem or need that leads to this product.
+
+Medium Shot:
+The same person examines, cleans, organizes, measures, prepares or gets ready for the product according to the actual use case.
+
+Close-up:
+Show realistic details of the problem.
+
+Final Shot:
+The area is prepared and ready for the product.
+
+Continuity rules:
+${ref}
+No teleportation, no sudden object appearance/disappearance, no unexplained scene changes, no premature installation.`;
+
+ const scene2=`5. VIDEO PROMPT — SCENE 2 (8–10 seconds)
+
+Create a realistic vertical 9:16 affiliate video.
+
+${ref}
+
+Opening:
+The person naturally brings or picks up the product.
+
+Product Close-up:
+Show the exact product clearly and accurately.
+
+Usage:
+Demonstrate realistic use step-by-step according to the supplied information.
+
+Result:
+Show a believable improvement or useful outcome without exaggeration.
+
+Final Product Shot:
+Clear close-up of the product in its real environment.
+
+Do not change product shape, color, logo, label, components or proportions. No teleportation. Keep location and character continuity.`;
+
+ const voice=`6. VOICEOVER — ประมาณ 20 วินาที
+
+[0–3s HOOK]
+${hook(n,d)}
+
+[3–8s PROBLEM]
+พูดถึงปัญหาที่กลุ่มเป้าหมายเจอ โดยใช้ข้อมูลจริงจากรายละเอียดสินค้า
+
+[8–15s PRODUCT + BENEFIT]
+แนะนำ ${n} และจุดเด่นที่มีอยู่ในข้อมูลสินค้า
+
+[15–18s RESULT]
+อธิบายประโยชน์ที่ผู้ใช้คาดหวังได้อย่างสมจริง
+
+[18–20s CTA]
+“ใครสนใจ ลองกดดูรายละเอียดเพิ่มเติมที่ลิงก์ได้เลยครับ”`;
+
+ const captions=`7. CAPTION
+
+Caption 1 — Problem/Solution
+เจอปัญหาแบบนี้อยู่ไหม? ${n} อาจเป็นอีกตัวเลือกที่ช่วยจัดการปัญหานี้ได้ รายละเอียดและวิธีใช้ดูได้ที่ลิงก์ครับ
+
+Caption 2 — รีวิวธรรมชาติ
+ตัวนี้น่าสนใจตรงที่ ${d.split(/[.!?\\n]/)[0]||'ใช้งานได้ตรงกับปัญหาที่ต้องการแก้'} ใครกำลังมองหาแบบนี้ ลองดูรายละเอียดก่อนตัดสินใจครับ
+
+Caption 3 — Curiosity
+ของชิ้นเล็ก ๆ แต่ถ้าเลือกให้ตรงกับปัญหา ก็ช่วยให้ใช้งานสะดวกขึ้นได้ ใครสนใจ ${n} กดดูรายละเอียดเพิ่มเติมได้ครับ
+
+8. HASHTAGS
+#รีวิวของดี #รีวิวสินค้า #ของดีบอกต่อ #Affiliate #ของใช้ #ไอเดียดีๆ #ของน่าใช้
+${hashtags(c)}`;
+
+ generated={analysis,prompts:before+"\\n\\n"+after+"\\n\\n"+scene1+"\\n\\n"+scene2,script:voice,social:captions,
+ all:[analysis,before,after,scene1,scene2,voice,captions].join("\\n\\n==============================\\n\\n")};
+ document.getElementById('output').textContent=generated.all;
+ document.getElementById('status').textContent='สร้างชุดคอนเทนต์เรียบร้อยแล้ว';
+}
+function hook(n,d){
+ const first=d.split(/[.!?\\n]/).map(x=>x.trim()).filter(Boolean)[0];
+ return first?`“กำลังเจอปัญหาเรื่องนี้อยู่หรือเปล่า? ลองดู ${n} ตัวนี้ครับ”`:`“ถ้ากำลังมองหาวิธีแก้ปัญหาแบบง่าย ๆ ลองดูตัวนี้ครับ”`;
+}
+function hashtags(c){
+ const map={"แต่งบ้าน / DIY":"#แต่งบ้าน #DIYบ้าน #ไอเดียแต่งบ้าน","เครื่องมือ":"#เครื่องมือช่าง #งานช่าง #DIY","ของใช้ในบ้าน":"#ของใช้ในบ้าน #บ้านน่าอยู่","รถยนต์ / มอเตอร์ไซค์":"#รถยนต์ #มอเตอร์ไซค์ #ของแต่งรถ","อิเล็กทรอนิกส์":"#ไอที #อุปกรณ์ไอที #แกดเจ็ต","แฟชั่น":"#แฟชั่น #ของน่าใช้","ความงาม / ดูแลตัวเอง":"#ของใช้ส่วนตัว #รีวิวของใช้","Outdoor":"#Outdoor #แคมป์ปิ้ง #กิจกรรมกลางแจ้ง","อื่น ๆ":"#ของน่าใช้"};return map[c]||map["อื่น ๆ"];
+}
+function showTab(t,b){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+ document.getElementById('output').textContent=generated[t]||'ยังไม่ได้สร้างคอนเทนต์';
+}
+async function copyOutput(){
+ const text=document.getElementById('output').textContent;
+ if(!text||text.startsWith('กรอกข้อมูล'))return;
+ await navigator.clipboard.writeText(text);document.getElementById('status').textContent='คัดลอกแล้ว';
+}
+function downloadTxt(){
+ const blob=new Blob([generated.all||'ยังไม่มีข้อมูล'],{type:'text/plain;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(val('name')||'affiliate-content')+'.txt';a.click();
+}
+function resetAll(){
+ document.querySelectorAll('input,textarea').forEach(x=>x.value='');files=[];renderPreview();
+ generated={all:"",analysis:"",prompts:"",script:"",social:""};
+ document.getElementById('output').textContent='กรอกข้อมูลสินค้า แล้วกด “สร้างคอนเทนต์”';
+ document.getElementById('status').textContent='';
+}
 </script>
-</body>
-</html>
+</body></html>
